@@ -56,6 +56,8 @@ cd aizaobao
 ```
 
 #### 方式二：传统服务器部署
+支持真正的后台运行，关闭终端后服务继续运行。
+
 ```bash
 # 1. 克隆项目
 git clone https://github.com/freestylefly/aizaobao.git
@@ -72,7 +74,7 @@ playwright install-deps chromium
 cp config.example .env
 # 编辑 .env 文件，设置SECRET_KEY等
 
-# 5. 启动应用
+# 5. 启动应用（真正的后台运行）
 FLASK_ENV=production ./start.sh start
 
 # 其他管理命令
@@ -81,6 +83,12 @@ FLASK_ENV=production ./start.sh start
 ./start.sh status    # 查看状态
 ./start.sh help      # 查看帮助
 ```
+
+**后台运行特性：**
+- ✅ 使用 `setsid` + `nohup` + `disown` 确保完全脱离终端
+- ✅ 关闭SSH连接后服务继续运行
+- ✅ 自动重定向日志到 `/tmp/aizaobao.log`
+- ✅ PID文件管理，支持状态检查和优雅停止
 
 ### 💻 本地部署（开发环境）
 

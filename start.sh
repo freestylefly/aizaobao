@@ -68,16 +68,18 @@ start_app() {
         echo "🏭 生产环境模式"
         echo "⚙️  正在启动Gunicorn服务器..."
         
-        # 使用Gunicorn启动（后台运行）
-        nohup gunicorn --config gunicorn.conf.py app:app > "$LOG_FILE" 2>&1 &
+        # 使用Gunicorn启动（彻底后台运行）
+        setsid nohup gunicorn --config gunicorn.conf.py app:app > "$LOG_FILE" 2>&1 < /dev/null &
         echo $! > "$PID_FILE"
+        disown
     else
         echo "🛠️  开发环境模式"
         echo "⚙️  正在启动Flask开发服务器..."
         
-        # 启动应用（后台运行）
-        nohup python3 app.py > "$LOG_FILE" 2>&1 &
+        # 启动应用（彻底后台运行）
+        setsid nohup python3 app.py > "$LOG_FILE" 2>&1 < /dev/null &
         echo $! > "$PID_FILE"
+        disown
     fi
     
     # 等待启动
