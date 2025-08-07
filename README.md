@@ -45,10 +45,14 @@ git clone https://github.com/freestylefly/aizaobao.git
 cd aizaobao
 
 # 2. 一键部署
-./deploy.sh
+./deploy.sh deploy
 
-# 或手动部署
-docker-compose up --build -d
+# 或使用其他管理命令
+./deploy.sh restart   # 重启应用
+./deploy.sh stop      # 停止应用  
+./deploy.sh logs      # 查看日志
+./deploy.sh status    # 查看状态
+./deploy.sh help      # 查看帮助
 ```
 
 #### 方式二：传统服务器部署
@@ -68,8 +72,14 @@ playwright install-deps chromium
 cp config.example .env
 # 编辑 .env 文件，设置SECRET_KEY等
 
-# 5. 启动生产环境
-FLASK_ENV=production ./start.sh
+# 5. 启动应用
+FLASK_ENV=production ./start.sh start
+
+# 其他管理命令
+./start.sh restart   # 重启应用
+./start.sh stop      # 停止应用
+./start.sh status    # 查看状态
+./start.sh help      # 查看帮助
 ```
 
 ### 💻 本地部署（开发环境）
@@ -86,7 +96,14 @@ pip install -r requirements.txt
 playwright install chromium
 
 # 4. 启动开发环境
+./start.sh start     # 推荐使用脚本启动
+# 或直接运行
 python app.py
+
+# 管理命令
+./start.sh restart   # 重启应用
+./start.sh stop      # 停止应用
+./start.sh status    # 查看状态
 ```
 
 ### 🌐 访问应用
@@ -181,29 +198,33 @@ docker-compose up -d
 
 ## 🔧 运维管理
 
-### Docker环境
+### Docker环境（推荐使用deploy.sh）
 ```bash
-# 查看运行状态
-docker-compose ps
+# 使用增强的部署脚本
+./deploy.sh status    # 查看详细状态
+./deploy.sh logs      # 查看实时日志
+./deploy.sh restart   # 重启服务
+./deploy.sh stop      # 停止服务
+./deploy.sh build     # 重新构建镜像
 
-# 查看实时日志  
-docker-compose logs -f
-
-# 重启服务
-docker-compose restart
-
-# 停止服务
-docker-compose down
+# 原生Docker命令
+docker-compose ps     # 查看容器状态
+docker-compose logs -f # 查看日志
+docker-compose restart # 重启服务
+docker-compose down   # 停止服务
 ```
 
-### 传统部署
+### 传统部署（使用start.sh）
 ```bash
-# 查看进程
-ps aux | grep python
+# 使用增强的启动脚本
+./start.sh status     # 查看应用状态
+./start.sh restart    # 重启应用
+./start.sh stop       # 停止应用
+./start.sh start      # 启动应用
 
-# 重启服务
-pkill -f "python.*app.py"
-./start.sh
+# 原生命令
+ps aux | grep python  # 查看进程
+pkill -f "python.*app.py"  # 停止进程
 ```
 
 ### 防火墙配置（服务器部署）
