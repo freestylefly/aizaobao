@@ -11,7 +11,8 @@ import secrets
 import io
 
 app = Flask(__name__)
-app.secret_key = secrets.token_hex(16)
+# 从环境变量读取secret key，如果没有则生成一个临时的
+app.secret_key = os.getenv('SECRET_KEY') or secrets.token_hex(16)
 
 # 默认配置
 DEFAULT_CONFIG = {

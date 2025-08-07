@@ -51,6 +51,16 @@ logs/
 .env
 .env.local
 .env.production
+.env.development
+.env.test
+
+# 敏感配置文件
+*.key
+*.pem
+*.p12
+*.pfx
+secrets.json
+credentials.json
 
 # 缓存文件（保留目录结构但忽略具体内容）
 cache/*.json

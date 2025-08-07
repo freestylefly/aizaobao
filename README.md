@@ -2,6 +2,8 @@
 
 一个基于Flask和Minimax语音合成技术的现代化AI新闻语音播报平台，具有科技感十足的用户界面。
 
+![界面](https://cdn.canghecode.com/blog/20250807205732.png)
+
 ## ✨ 主要功能
 
 - 🔥 **实时新闻获取**: 自动抓取最新AI科技资讯
@@ -34,7 +36,7 @@
 
 ### 1. 克隆项目
 ```bash
-git clone <项目地址>
+git clone git@github.com:freestylefly/aizaobao.git
 cd aizaobao
 ```
 
@@ -54,10 +56,14 @@ python app.py
 ## ⚙️ 配置说明
 
 ### Minimax API配置
-1. 注册并获取Minimax API账户
+1. 注册并获取Minimax API账户：https://platform.minimaxi.com/user-center/basic-information/interface-key
 2. 在设置面板中配置以下参数：
    - **Group ID**: 您的Minimax Group ID
+  Group ID在账户管理这里获取：
+
+![Minimax Group ID](https://cdn.canghecode.com/blog/20250807205410.png)
    - **API Key**: 您的Minimax API密钥
+![Minimax API密钥](https://cdn.canghecode.com/blog/20250807205555.png)
 
 ### 语音参数配置
 - **模型**: 选择语音合成模型
