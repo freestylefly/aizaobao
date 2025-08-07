@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI早报 - 智能语音新闻平台</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航 -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-microphone-alt"></i>
+                <span>AI早报</span>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="toggleSettings()">
+                    <i class="fas fa-cog"></i>
+                    <span>设置</span>
+                </button>
+                <button class="nav-btn" onclick="refreshNews()" title="清除缓存并获取最新新闻">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>刷新</span>
+                </button>
+                <button class="nav-btn" onclick="toggleHistory()">
+                    <i class="fas fa-history"></i>
+                    <span>历史记录</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 设置面板 -->
+        <div class="settings-panel" id="settingsPanel">
+            <div class="settings-content">
+                <div class="settings-header">
+                    <h3><i class="fas fa-cog"></i> Minimax API 配置</h3>
+                    <button class="close-btn" onclick="toggleSettings()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label for="groupId">Group ID</label>
+                        <input type="text" id="groupId" placeholder="请输入您的Group ID">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="apiKey">API Key</label>
+                        <input type="password" id="apiKey" placeholder="请输入您的API Key">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="model">模型</label>
+                        <select id="model">
+                            <option value="speech-2.5-hd-preview">speech-2.5-hd-preview</option>
+                            <option value="speech-01">speech-01</option>
+                            <option value="speech-02-hd">speech-02-hd</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="voiceId">音色</label>
+                        <select id="voiceId">
+                            <option value="Boyan_new_platform">博彦（男声）</option>
+                            <option value="female-shaonv">少女（女声）</option>
+                            <option value="male-qn-qingse">青年（男声）</option>
+                            <option value="Charming_Lady">魅力女士</option>
+                            <option value="cute_boy">可爱男孩</option>
+                            <option value="audiobook_female_1">有声书女声1</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="emotion">情绪</label>
+                        <select id="emotion">
+                            <option value="neutral">中性</option>
+                            <option value="happy">开心</option>
+                            <option value="sad">悲伤</option>
+                            <option value="angry">愤怒</option>
+                            <option value="fearful">恐惧</option>
+                            <option value="disgusted">厌恶</option>
+                            <option value="surprised">惊讶</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="speed">语速 <span id="speedValue">1.0</span></label>
+                        <input type="range" id="speed" min="0.5" max="2.0" step="0.1" value="1.0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pitch">声调 <span id="pitchValue">0</span></label>
+                        <input type="range" id="pitch" min="-12" max="12" step="1" value="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="vol">音量 <span id="volValue">1.0</span></label>
+                        <input type="range" id="vol" min="0.1" max="2.0" step="0.1" value="1.0">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn btn-primary" onclick="saveSettings()">
+                            <i class="fas fa-save"></i>
+                            保存配置
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetSettings()">
+                            <i class="fas fa-undo"></i>
+                            重置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区域 -->
+        <main class="main-content">
+            <!-- 新闻内容卡片 -->
+            <div class="news-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-newspaper"></i> 今日AI科技早报</h2>
+                    <div class="news-meta">
+                        <span id="newsTimestamp">--</span>
+                    </div>
+                </div>
+                
+                <div class="card-content">
+                    <div class="news-content" id="newsContent">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>正在加载最新新闻...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-actions">
+                    <button class="btn btn-primary" id="generateBtn" onclick="generateAudio()" disabled>
+                        <i class="fas fa-microphone"></i>
+                        <span>生成语音</span>
+                    </button>
+                    
+                    <button class="btn btn-secondary" id="copyBtn" onclick="copyNews()" disabled>
+                        <i class="fas fa-copy"></i>
+                        <span>一键复制</span>
+                    </button>
+                    
+                    <button class="btn btn-secondary" id="playBtn" onclick="playAudio()" disabled>
+                        <i class="fas fa-play"></i>
+                        <span>播放</span>
+                    </button>
+                    
+                    <button class="btn btn-success" id="downloadBtn" onclick="downloadAudio()" disabled>
+                        <i class="fas fa-download"></i>
+                        <span>下载</span>
+                    </button>
+                    
+                    <button class="btn btn-warning" id="shareBtn" onclick="shareAudio()" disabled style="display: none;">
+                        <i class="fas fa-share-alt"></i>
+                        <span>分享</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 音频生成进度 -->
+            <div class="audio-generation" id="audioGeneration" style="display: none;">
+                <div class="generation-header">
+                    <h3><i class="fas fa-magic"></i> 音频生成中</h3>
+                </div>
+                <div class="generation-content">
+                    <div class="generation-status" id="generationStatus">
+                        <i class="fas fa-cog fa-spin"></i>
+                        <span id="generationText">正在准备生成...</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="progressPercent">0%</span>
+                            <span id="progressTime">预计时间: --</span>
+                        </div>
+                    </div>
+                    <div class="generation-tips">
+                        <p><i class="fas fa-info-circle"></i> 正在使用Minimax AI技术生成高质量语音，请耐心等待...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 音频播放器 -->
+            <div class="audio-player" id="audioPlayer" style="display: none;">
+                <div class="player-header">
+                    <h3><i class="fas fa-volume-up"></i> 语音播放器</h3>
+                </div>
+                <div class="player-content">
+                    <audio controls id="audioElement" style="width: 100%;">
+                        您的浏览器不支持音频播放。
+                    </audio>
+                </div>
+            </div>
+
+            <!-- 历史记录面板 -->
+            <div class="history-panel" id="historyPanel">
+                <div class="history-content">
+                    <div class="history-header">
+                        <h3><i class="fas fa-history"></i> 历史记录</h3>
+                        <button class="close-btn" onclick="toggleHistory()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="history-form">
+                        <div id="historyDateList" class="history-date-list">
+                            <div class="loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <span>正在加载历史记录...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 历史记录详情模态框 -->
+            <div id="historyDetailModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="historyDetailTitle">
+                            <i class="fas fa-calendar-day"></i>
+                            早报详情
+                        </h3>
+                        <button class="close-btn" onclick="hideHistoryDetail()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="historyDetailContent" class="history-detail-content">
+                            <!-- 历史记录详细内容将在这里显示 -->
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn btn-primary" onclick="copyHistoryDetail()">
+                                <i class="fas fa-copy"></i>
+                                复制内容
+                            </button>
+                            <button class="btn btn-secondary" onclick="loadHistoryToMain()">
+                                <i class="fas fa-arrow-left"></i>
+                                加载到主界面
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 状态提示 -->
+            <div class="status-message" id="statusMessage" style="display: none;">
+                <div class="message-content">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="messageText">状态信息</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- 底部信息 -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p><i class="fas fa-robot"></i> AI早报 - 基于Minimax语音合成技术</p>
+                <p>让科技新闻有声有色</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

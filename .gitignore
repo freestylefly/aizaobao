@@ -1,0 +1,85 @@
+# Python相关
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 虚拟环境
+venv/
+env/
+ENV/
+.venv/
+.env/
+
+# IDE相关
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统相关
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 日志文件
+*.log
+logs/
+
+# 环境配置文件
+.env
+.env.local
+.env.production
+
+# 缓存文件（保留目录结构但忽略具体内容）
+cache/*.json
+!cache/.gitkeep
+
+# 音频文件（保留目录结构但忽略具体音频）
+static/audio/*.mp3
+static/audio/*.wav
+!static/audio/.gitkeep
+
+# 临时文件
+*.tmp
+*.temp
+.cache/
+
+# 测试覆盖率报告
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# 打包文件
+*.tar.gz
+*.zip
+
+# Docker相关（如果不想提交的话）
+# Dockerfile
+# docker-compose.yml
+
+# 本地配置
+config.local

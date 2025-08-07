@@ -1,0 +1,22 @@
+# AI早报应用环境配置示例
+# 复制此文件为 .env 并填入真实配置
+
+# Flask配置
+FLASK_ENV=production
+FLASK_DEBUG=False
+SECRET_KEY=your-secret-key-here
+
+# 应用配置
+HOST=0.0.0.0
+PORT=6888
+
+# Minimax API配置（可选，也可在界面中配置）
+MINIMAX_GROUP_ID=your-group-id
+MINIMAX_API_KEY=your-api-key
+
+# 缓存配置
+CACHE_DIR=cache
+AUDIO_DIR=static/audio
+
+# 日志配置
+LOG_LEVEL=INFO

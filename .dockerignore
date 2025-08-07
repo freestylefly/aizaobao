@@ -1,0 +1,57 @@
+# Git相关
+.git
+.gitignore
+
+# Python相关
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.venv
+.env
+
+# 开发工具
+.vscode
+.idea
+*.swp
+*.swo
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.temp
+
+# 文档
+*.md
+docs/
+
+# 测试文件
+tests/
+test_*.py
+
+# 构建产物
+dist/
+build/
+*.egg-info/
+
+# 本地数据（保留结构，不复制具体文件）
+cache/*.json
+static/audio/*.mp3
+
+# Docker相关
+Dockerfile
+docker-compose.yml
+.dockerignore
