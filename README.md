@@ -32,28 +32,85 @@
 - **JavaScript ES6+**: 交互逻辑和API调用
 - **Font Awesome**: 图标库
 
-## 📦 安装部署
+## 📦 部署指南
 
-### 1. 克隆项目
+### 🚀 服务器部署（生产环境）
+
+#### 方式一：Docker部署（强烈推荐）
+Docker部署自动解决所有依赖问题，包括Playwright浏览器安装。
+
 ```bash
-git clone git@github.com:freestylefly/aizaobao.git
+# 1. 克隆项目
+git clone https://github.com/freestylefly/aizaobao.git
 cd aizaobao
+
+# 2. 一键部署
+./deploy.sh
+
+# 或手动部署
+docker-compose up --build -d
 ```
 
-### 2. 安装依赖
+#### 方式二：传统服务器部署
 ```bash
+# 1. 克隆项目
+git clone https://github.com/freestylefly/aizaobao.git
+cd aizaobao
+
+# 2. 安装Python依赖
 pip install -r requirements.txt
+
+# 3. 安装Playwright浏览器（重要！）
+playwright install chromium
+playwright install-deps chromium
+
+# 4. 配置环境变量
+cp config.example .env
+# 编辑 .env 文件，设置SECRET_KEY等
+
+# 5. 启动生产环境
+FLASK_ENV=production ./start.sh
 ```
 
-### 3. 运行应用
+### 💻 本地部署（开发环境）
+
 ```bash
+# 1. 克隆项目
+git clone https://github.com/freestylefly/aizaobao.git
+cd aizaobao
+
+# 2. 安装Python依赖
+pip install -r requirements.txt
+
+# 3. 安装Playwright浏览器
+playwright install chromium
+
+# 4. 启动开发环境
 python app.py
 ```
 
-### 4. 访问应用
-打开浏览器访问: `http://localhost:6888`
+### 🌐 访问应用
+- **本地访问**: http://localhost:6888
+- **服务器访问**: http://[服务器IP]:6888
 
 ## ⚙️ 配置说明
+
+### 环境变量配置
+创建 `.env` 文件（服务器部署推荐）：
+```bash
+# Flask配置
+FLASK_ENV=production
+FLASK_DEBUG=False
+SECRET_KEY=your-secret-key-here
+
+# 应用配置
+HOST=0.0.0.0
+PORT=6888
+
+# Minimax API配置（可选，也可在界面中配置）
+MINIMAX_GROUP_ID=your-group-id
+MINIMAX_API_KEY=your-api-key
+```
 
 ### Minimax API配置
 1. 注册并获取Minimax API账户：https://platform.minimaxi.com/user-center/basic-information/interface-key
@@ -72,6 +129,92 @@ python app.py
 - **语速**: 0.5-2.0倍速调节
 - **声调**: -12到+12半音调节
 - **音量**: 0.1-2.0倍音量调节
+
+## 🐛 常见问题
+
+### 1. Playwright浏览器问题
+如果遇到以下错误：
+```
+BrowserType.launch: Executable doesn't exist at /root/.cache/ms-playwright/chromium-1134/chrome-linux/chrome
+```
+
+**解决方案：**
+- **Docker部署**：新版Dockerfile已自动解决，重新构建镜像即可
+- **本地/服务器部署**：
+```bash
+# 安装Playwright浏览器
+playwright install chromium
+playwright install-deps chromium
+
+# 如果权限问题，使用sudo
+sudo playwright install chromium
+sudo playwright install-deps chromium
+```
+
+### 2. 端口占用问题
+```bash
+# 查看端口占用
+lsof -i :6888
+
+# 终止占用进程
+kill -9 <PID>
+```
+
+### 3. 依赖安装失败
+```bash
+# 升级pip
+pip install --upgrade pip
+
+# 重新安装依赖
+pip install -r requirements.txt --force-reinstall
+```
+
+### 4. Docker部署问题
+```bash
+# 清理Docker缓存
+docker system prune -f
+
+# 重新构建镜像
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+## 🔧 运维管理
+
+### Docker环境
+```bash
+# 查看运行状态
+docker-compose ps
+
+# 查看实时日志  
+docker-compose logs -f
+
+# 重启服务
+docker-compose restart
+
+# 停止服务
+docker-compose down
+```
+
+### 传统部署
+```bash
+# 查看进程
+ps aux | grep python
+
+# 重启服务
+pkill -f "python.*app.py"
+./start.sh
+```
+
+### 防火墙配置（服务器部署）
+```bash
+# Ubuntu/Debian
+sudo ufw allow 6888
+
+# CentOS/RHEL  
+sudo firewall-cmd --permanent --add-port=6888/tcp
+sudo firewall-cmd --reload
+```
 
 ## 🎯 使用指南
 

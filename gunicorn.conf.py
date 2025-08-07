@@ -4,12 +4,14 @@ import os
 
 # 服务器配置
 bind = f"0.0.0.0:{os.getenv('PORT', '6888')}"
-workers = int(os.getenv('WORKERS', '2'))
+# 使用单个worker避免playwright浏览器冲突
+workers = int(os.getenv('WORKERS', '1'))
 worker_class = 'sync'
 worker_connections = 1000
 max_requests = 1000
 max_requests_jitter = 100
-timeout = 120
+# 增加超时时间以支持网页爬取任务
+timeout = int(os.getenv('TIMEOUT', '300'))
 keepalive = 2
 
 # 日志配置
