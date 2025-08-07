@@ -124,7 +124,7 @@ function showMessage(text, type = 'info', duration = 3000) {
 // 加载配置
 async function loadConfig() {
     try {
-        const response = await fetch('/api/config');
+        const response = await fetch('/aizaobao/api/config');
         const config = await response.json();
         
         // 填充表单
@@ -162,7 +162,7 @@ async function saveSettings() {
     };
     
     try {
-        const response = await fetch('/api/config', {
+        const response = await fetch('/aizaobao/api/config', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -217,7 +217,7 @@ async function loadNews() {
             </div>
         `;
         
-        const response = await fetch('/api/news');
+        const response = await fetch('/aizaobao/api/news');
         const result = await response.json();
         
         if (result.success) {
@@ -318,7 +318,7 @@ async function refreshNews() {
         `;
         
         // 调用强制刷新API（清除缓存）
-        const response = await fetch('/api/refresh-news', {
+        const response = await fetch('/aizaobao/api/refresh-news', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -413,7 +413,7 @@ async function forceRefreshNews() {
             </div>
         `;
         
-        const response = await fetch('/api/refresh-news', {
+        const response = await fetch('/aizaobao/api/refresh-news', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -577,7 +577,7 @@ async function loadHistoryList() {
             </div>
         `;
         
-        const response = await fetch('/api/history');
+        const response = await fetch('/aizaobao/api/history');
         const result = await response.json();
         
         if (result.success && result.history.length > 0) {
@@ -687,7 +687,7 @@ async function showHistoryDetail(cacheDate) {
             </div>
         `;
         
-        const response = await fetch(`/api/history/${cacheDate}`);
+        const response = await fetch(`/aizaobao/api/history/${cacheDate}`);
         const result = await response.json();
         
         if (result.success) {
@@ -814,7 +814,7 @@ async function viewHistory(cacheDate) {
 // 兼容旧版本的函数（保留以防其他地方调用）
 async function copyHistoryNews(cacheDate) {
     try {
-        const response = await fetch(`/api/history/${cacheDate}`);
+        const response = await fetch(`/aizaobao/api/history/${cacheDate}`);
         const result = await response.json();
         
         if (result.success) {
@@ -880,7 +880,7 @@ async function generateAudio() {
         // 开始进度模拟
         startProgressSimulation();
         
-        const response = await fetch('/api/generate-audio', {
+        const response = await fetch('/aizaobao/api/generate-audio', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -1077,7 +1077,7 @@ async function downloadAudio() {
     }
     
     try {
-        const response = await fetch('/api/download-audio', {
+        const response = await fetch('/aizaobao/api/download-audio', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

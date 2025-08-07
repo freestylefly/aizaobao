@@ -69,7 +69,7 @@ EXPOSE 6888
 
 # 健康检查
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-  CMD curl -f http://localhost:6888/ || exit 1
+  CMD curl -f http://localhost:6888/aizaobao/ || exit 1
 
 # 启动虚拟显示器（后台运行）并启动应用
 CMD Xvfb :99 -screen 0 1024x768x24 -nolisten tcp & \

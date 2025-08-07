@@ -72,7 +72,7 @@ start_app() {
     # 创建必要的目录
     mkdir -p templates static/css static/js cache static/audio
 
-    echo "🌐 应用将在 http://localhost:6888 启动"
+    echo "🌐 应用将在 http://localhost:6888/aizaobao 启动"
     echo "📋 缓存功能已启用 - 每天首次访问获取最新新闻，后续使用缓存"
 
     # 检查运行模式
@@ -161,7 +161,7 @@ status_app() {
     if is_running; then
         local pid=$(get_pid)
         echo "✅ $APP_NAME 正在运行 (PID: $pid)"
-        echo "🌐 访问地址: http://localhost:6888"
+        echo "🌐 访问地址: http://localhost:6888/aizaobao"
         echo "📊 日志文件: $LOG_FILE"
         
         # 显示进程信息

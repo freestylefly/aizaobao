@@ -252,7 +252,7 @@ def generate_audio(text, config):
                             f.write(audio_bytes)
                         
                         # 生成分享URL
-                        share_url = f"/static/audio/{filename}"
+                        share_url = f"/aizaobao/static/audio/{filename}"
                         
                         return audio_bytes, None, share_url
                     except Exception as e:
@@ -268,12 +268,12 @@ def generate_audio(text, config):
     except Exception as e:
         return None, f"请求异常: {str(e)}", None
 
-@app.route('/')
+@app.route('/aizaobao/')
 def index():
     """主页"""
     return render_template('index.html')
 
-@app.route('/api/config', methods=['GET', 'POST'])
+@app.route('/aizaobao/api/config', methods=['GET', 'POST'])
 def config_api():
     """配置API"""
     if request.method == 'GET':
@@ -292,7 +292,7 @@ def config_api():
         except Exception as e:
             return jsonify({'success': False, 'message': f'配置更新失败: {str(e)}'})
 
-@app.route('/api/news')
+@app.route('/aizaobao/api/news')
 def get_news():
     """获取新闻API"""
     try:
@@ -319,7 +319,7 @@ def get_news():
     except Exception as e:
         return jsonify({'success': False, 'message': f'获取新闻异常: {str(e)}'})
 
-@app.route('/api/refresh-news', methods=['POST'])
+@app.route('/aizaobao/api/refresh-news', methods=['POST'])
 def refresh_news():
     """强制刷新新闻（忽略缓存）"""
     try:
@@ -350,7 +350,7 @@ def refresh_news():
     except Exception as e:
         return jsonify({'success': False, 'message': f'强制刷新异常: {str(e)}'})
 
-@app.route('/api/history')
+@app.route('/aizaobao/api/history')
 def get_history():
     """获取历史记录列表"""
     try:
@@ -387,7 +387,7 @@ def get_history():
     except Exception as e:
         return jsonify({'success': False, 'message': f'获取历史记录失败: {str(e)}'})
 
-@app.route('/api/history/<cache_date>')
+@app.route('/aizaobao/api/history/<cache_date>')
 def get_history_detail(cache_date):
     """获取特定日期的历史记录详情"""
     try:
@@ -412,7 +412,7 @@ def get_history_detail(cache_date):
     except Exception as e:
         return jsonify({'success': False, 'message': f'获取历史记录详情失败: {str(e)}'})
 
-@app.route('/api/generate-audio', methods=['POST'])
+@app.route('/aizaobao/api/generate-audio', methods=['POST'])
 def generate_audio_api():
     """生成音频API"""
     try:
@@ -445,7 +445,7 @@ def generate_audio_api():
     except Exception as e:
         return jsonify({'success': False, 'message': f'生成音频异常: {str(e)}'})
 
-@app.route('/api/download-audio', methods=['POST'])
+@app.route('/aizaobao/api/download-audio', methods=['POST'])
 def download_audio():
     """下载音频文件"""
     try:

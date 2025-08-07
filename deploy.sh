@@ -82,9 +82,9 @@ deploy_app() {
     
     while [ $attempt -le $max_attempts ]; do
         echo "🔍 健康检查 (第$attempt次/共$max_attempts次)..."
-        if curl -f http://localhost:6888/ &> /dev/null; then
+        if curl -f http://localhost:6888/aizaobao/ &> /dev/null; then
             echo "✅ 部署成功！"
-            echo "🌐 应用访问地址: http://localhost:6888"
+            echo "🌐 应用访问地址: http://localhost:6888/aizaobao"
             echo "📊 查看日志: ./deploy.sh logs"
             echo "🛑 停止服务: ./deploy.sh stop"
             return 0
@@ -119,7 +119,7 @@ restart_app() {
         
         if is_running; then
             echo "✅ $APP_NAME 重启成功"
-            echo "🌐 应用访问地址: http://localhost:6888"
+            echo "🌐 应用访问地址: http://localhost:6888/aizaobao"
         else
             echo "❌ $APP_NAME 重启失败"
             echo "📊 查看日志: ./deploy.sh logs"
@@ -184,10 +184,10 @@ status_app() {
     # 服务健康检查
     if is_running; then
         echo "✅ 服务状态: 运行中"
-        echo "🌐 访问地址: http://localhost:6888"
+        echo "🌐 访问地址: http://localhost:6888/aizaobao"
         
         # 网络检查
-        if curl -f http://localhost:6888/ &> /dev/null; then
+        if curl -f http://localhost:6888/aizaobao/ &> /dev/null; then
             echo "🔗 网络状态: 正常"
         else
             echo "❌ 网络状态: 异常（服务无响应）"
