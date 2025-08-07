@@ -30,6 +30,18 @@ is_running() {
 start_app() {
     echo "🚀 正在启动$APP_NAME..."
     
+    # 预清理：确保没有冲突进程
+    echo "🧹 预清理检查..."
+    local conflicting_pids=$(pgrep -f "gunicorn.*app:app" 2>/dev/null || true)
+    if [ -n "$conflicting_pids" ]; then
+        echo "⚠️  发现冲突进程，先清理..."
+        echo "$conflicting_pids" | xargs kill -9 2>/dev/null || true
+        sleep 2
+    fi
+    
+    # 清理可能存在的过期PID文件
+    rm -f "/tmp/gunicorn.pid" 2>/dev/null || true
+    
     if is_running; then
         echo "⚠️  $APP_NAME 已经在运行中"
         return 0
@@ -99,6 +111,7 @@ start_app() {
 stop_app() {
     echo "🛑 正在停止$APP_NAME..."
     
+    # 停止gunicorn主进程
     local pid=$(get_pid)
     if [ -n "$pid" ]; then
         echo "📋 正在停止进程 $pid"
@@ -110,16 +123,29 @@ stop_app() {
             echo "⚠️  强制停止进程"
             kill -9 "$pid" 2>/dev/null
         fi
-        
-        # 清理PID文件
-        rm -f "$PID_FILE"
-        echo "✅ $APP_NAME 已停止"
-    else
-        echo "⚠️  $APP_NAME 未在运行"
     fi
     
-    # 清理其他可能的进程
+    # 清理所有相关进程
+    echo "🧹 清理相关进程..."
+    pkill -f "gunicorn.*app:app" 2>/dev/null || true
     pkill -f "python.*app.py" 2>/dev/null || true
+    
+    # 清理PID文件
+    echo "🗑️  清理PID文件..."
+    rm -f "$PID_FILE"
+    rm -f "/tmp/gunicorn.pid" 2>/dev/null || true
+    
+    # 等待进程完全退出
+    sleep 1
+    
+    # 检查是否还有残留进程
+    local remaining_pids=$(pgrep -f "gunicorn.*app:app" 2>/dev/null || true)
+    if [ -n "$remaining_pids" ]; then
+        echo "⚠️  发现残留进程，强制清理..."
+        echo "$remaining_pids" | xargs kill -9 2>/dev/null || true
+    fi
+    
+    echo "✅ $APP_NAME 已完全停止"
 }
 
 # 重启应用
@@ -148,6 +174,32 @@ status_app() {
     fi
 }
 
+# 强制清理
+cleanup_app() {
+    echo "🧹 强制清理$APP_NAME所有进程和文件..."
+    
+    # 强制停止所有相关进程
+    echo "🔪 强制终止所有相关进程..."
+    pkill -9 -f "gunicorn.*app:app" 2>/dev/null || true
+    pkill -9 -f "python.*app.py" 2>/dev/null || true
+    
+    # 清理所有PID文件
+    echo "🗑️  清理所有PID文件..."
+    rm -f "$PID_FILE" 2>/dev/null || true
+    rm -f "/tmp/gunicorn.pid" 2>/dev/null || true
+    
+    # 清理端口占用
+    echo "🔌 检查端口占用..."
+    local port_pids=$(lsof -ti:6888 2>/dev/null || true)
+    if [ -n "$port_pids" ]; then
+        echo "⚠️  发现端口6888被占用，强制释放..."
+        echo "$port_pids" | xargs kill -9 2>/dev/null || true
+    fi
+    
+    sleep 2
+    echo "✅ 强制清理完成"
+}
+
 # 显示帮助信息
 show_help() {
     echo "用法: $0 [命令]"
@@ -157,12 +209,14 @@ show_help() {
     echo "  stop     停止$APP_NAME"
     echo "  restart  重启$APP_NAME"
     echo "  status   查看运行状态"
+    echo "  cleanup  强制清理所有进程和文件"
     echo "  help     显示此帮助信息"
     echo ""
     echo "示例:"
     echo "  $0 start      # 启动应用"
     echo "  $0 restart    # 重启应用"
     echo "  $0 status     # 查看状态"
+    echo "  $0 cleanup    # 强制清理（解决进程冲突）"
 }
 
 # 主逻辑
@@ -178,6 +232,9 @@ case "${1:-start}" in
         ;;
     status)
         status_app
+        ;;
+    cleanup)
+        cleanup_app
         ;;
     help|--help|-h)
         show_help
