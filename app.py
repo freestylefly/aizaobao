@@ -10,9 +10,12 @@ from crawl4ai import AsyncWebCrawler
 import secrets
 import io
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/aizaobao/static')
 # 从环境变量读取secret key，如果没有则生成一个临时的
 app.secret_key = os.getenv('SECRET_KEY') or secrets.token_hex(16)
+
+# 配置应用根路径，确保 URL 生成正确
+app.config['APPLICATION_ROOT'] = '/aizaobao'
 
 # 默认配置
 DEFAULT_CONFIG = {
