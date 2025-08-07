@@ -473,6 +473,27 @@ def download_audio():
     except Exception as e:
         return jsonify({'success': False, 'message': f'下载失败: {str(e)}'})
 
+@app.route('/aizaobao/static/<path:filename>')
+def serve_static_files(filename):
+    """处理静态文件请求（音频文件分享）"""
+    try:
+        # 构建文件路径
+        file_path = os.path.join('static', filename)
+        
+        # 检查文件是否存在
+        if not os.path.exists(file_path):
+            return jsonify({'error': '文件不存在'}), 404
+        
+        # 返回文件
+        return send_file(
+            file_path,
+            as_attachment=False,  # 不强制下载，可以在浏览器中播放
+            mimetype='audio/mpeg' if filename.endswith('.mp3') else None
+        )
+        
+    except Exception as e:
+        return jsonify({'error': f'访问文件失败: {str(e)}'}), 500
+
 if __name__ == '__main__':
     # 创建templates、static、cache和audio目录
     os.makedirs('templates', exist_ok=True)
