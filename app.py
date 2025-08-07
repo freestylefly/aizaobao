@@ -22,7 +22,7 @@ DEFAULT_CONFIG = {
     'group_id': '',
     'api_key': '',
     'model': 'speech-2.5-hd-preview',
-    'voice_id': 'Boyan_new_platform',
+    'voice_id': 'female-shaonv',
     'speed': 1.0,
     'pitch': 0,
     'vol': 1.0,

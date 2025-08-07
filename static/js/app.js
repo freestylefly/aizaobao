@@ -131,7 +131,7 @@ async function loadConfig() {
         document.getElementById('groupId').value = config.group_id || '';
         document.getElementById('apiKey').value = config.api_key === '...' ? '' : config.api_key || '';
         document.getElementById('model').value = config.model || 'speech-2.5-hd-preview';
-        document.getElementById('voiceId').value = config.voice_id || 'Boyan_new_platform';
+        document.getElementById('voiceId').value = config.voice_id || 'female-shaonv';
         document.getElementById('emotion').value = config.emotion || 'neutral';
         document.getElementById('speed').value = config.speed || 1.0;
         document.getElementById('pitch').value = config.pitch || 0;
@@ -190,7 +190,7 @@ function resetSettings() {
         document.getElementById('groupId').value = '';
         document.getElementById('apiKey').value = '';
         document.getElementById('model').value = 'speech-2.5-hd-preview';
-        document.getElementById('voiceId').value = 'Boyan_new_platform';
+        document.getElementById('voiceId').value = 'female-shaonv';
         document.getElementById('emotion').value = 'neutral';
         document.getElementById('speed').value = 1.0;
         document.getElementById('pitch').value = 0;
